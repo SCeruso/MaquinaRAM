@@ -52,7 +52,7 @@ void RamMachine::read_code(string filename){
 	Tag* tag;
 	vector<Tag> tags;
 	vector<instruction> coded;
-
+	instruction dummy;
 	bool error = false; 
 
 	file.open(filename.c_str());
@@ -95,36 +95,57 @@ void RamMachine::read_code(string filename){
 		firstspace = ins[i].find_first_of(" \t\f\v\n\r");
 		aux = ins[i].substr(0, firstspace);
 
-		if (aux.c_str() == (string)"LOAD")
-			coded[i].opcode_ = LOAD;
-		else if (aux.c_str() == (string)"STORE")
-			coded[i].opcode_ = STORE;
-		else if (aux.c_str() == (string)"ADD")
-			coded[i].opcode_ = ADD;
-		else if (aux.c_str() == (string)"SUB")
-			coded[i].opcode_ = SUB;
-		else if (aux.c_str() == (string)"MULT")
-			coded[i].opcode_ = MULT;
-		else if (aux.c_str() == (string)"DIV")
-			coded[i].opcode_ = DIV;
-		else if (aux.c_str() == (string)"READ")
-			coded[i].opcode_ = READ;
-		else if (aux.c_str() == (string)"WRITE")
-			coded[i].opcode_ = WRITE;
+		if (aux.c_str() == (string)"LOAD") {
+			dummy.opcode_ = LOAD;
+			coded.push_back(dummy);
+		}
+		else if (aux.c_str() == (string)"STORE") {
+			dummy.opcode_ = STORE;
+			coded.push_back(dummy);
+		}
+		else if (aux.c_str() == (string)"ADD") {
+			dummy.opcode_ = ADD;
+			coded.push_back(dummy);
+		}
+		else if (aux.c_str() == (string)"SUB") {
+			dummy.opcode_ = SUB;
+			coded.push_back(dummy);
+		}
+		else if (aux.c_str() == (string)"MULT") {
+			dummy.opcode_ = MULT;
+			coded.push_back(dummy);
+		}
+		else if (aux.c_str() == (string)"DIV") {
+			dummy.opcode_ = DIV;
+			coded.push_back(dummy);
+		}
+		else if (aux.c_str() == (string)"READ") {
+			dummy.opcode_ = READ;
+			coded.push_back(dummy);
+		}
+		else if (aux.c_str() == (string)"WRITE") {
+			dummy.opcode_ = WRITE;
+			coded.push_back(dummy);
+		}
 		else if (aux.c_str() == (string)"JUMP") {
-			coded[i].opcode_ = JUMP;
-			coded[i].type_ = TAGJUMP;
+			dummy.opcode_ = JUMP;
+			dummy.type_ = TAGJUMP;
+			coded.push_back(dummy);
 		}
 		else if (aux.c_str() == (string)"JGTZ") {
-			coded[i].opcode_ = JGTZ;
-			coded[i].type_ = TAGJUMP;
+			dummy.opcode_ = JGTZ;
+			dummy.type_ = TAGJUMP;
+			coded.push_back(dummy);
 		}
 		else if (aux.c_str() == (string)"JZERO") {
-			coded[i].opcode_ = JZERO;
-			coded[i].type_ = TAGJUMP;
+			dummy.opcode_ = JZERO;
+			dummy.type_ = TAGJUMP;
+			coded.push_back(dummy);
 		}
-		else if (aux.c_str() == (string)"HALT")
-			coded[i].opcode_ = HALT;
+		else if (aux.c_str() == (string)"HALT") {
+			dummy.opcode_ = HALT;
+			coded.push_back(dummy);
+		}
 		else {
 			cerr << "No se reconoce la instruccion: " << aux << endl;
 			error = true;
