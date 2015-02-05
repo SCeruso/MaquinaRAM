@@ -336,6 +336,19 @@ void RamMachine::write(int type, int operando) {
 	output.write(registers_[ACCUM]);
 }
 
+
+void RamMachine::jgtz(int operando) {
+	if (registers_[ACCUM] > 0)
+		program_.set_pc((operando - 1));
+}
+
+
+void RamMachine::jzero(int operando) {
+	if (registers_[ACCUM] == 0)
+		program_.set_pc((operando - 1));
+}
+
+
 void RamMachine::run() {
 	instruction ins;
 
@@ -354,6 +367,9 @@ void RamMachine::run() {
 		case DIV: div(ins.type_, ins.operando_); break;
 		case READ: read(ins.type_, ins.operando_); break;
 		case WRITE: write(ins.type_, ins.operando_); break;
+		case JUMP: program_.set_pc((ins.operando_ - 1)); break;
+		case JGTZ: jgtz(ins.operando_); break;
+		case JZERO: jzero(ins.operando_); break;
 		case HALT: break;
 		default:
 			break;

@@ -20,14 +20,12 @@ void Program::set_program(vector<instruction> instrucciones, vector<Tag> etiquet
 	tags_ = etiquetas;
 }
 
+
+void Program::set_pc(int p) { pc_ = p; }
+
+
 instruction Program::run() {
 
 	pc_++;
-	while (true){
-		if (program_[pc_].type_ == JUMP) {
-			//GESTIONAR SALTO
-		}
-		else
-			return program_[pc_]; 
-	}
+	return program_[pc_]; 
 }

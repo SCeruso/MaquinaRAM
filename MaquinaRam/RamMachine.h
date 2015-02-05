@@ -32,6 +32,8 @@ public:
 	void div(int, int);
 	void read(int, int);
 	void write(int, int);
+	void jgtz(int);
+	void jzero(int);
 	void run();
 	void imprimir();
 };

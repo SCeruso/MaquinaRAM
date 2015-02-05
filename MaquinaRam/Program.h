@@ -28,5 +28,6 @@ public:
 	~Program();
 	void set_program(vector<instruction>, vector<Tag>);
 	instruction run();
+	void set_pc(int);
 };
 
