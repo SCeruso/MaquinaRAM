@@ -94,7 +94,9 @@ void RamMachine::read_code(string filename){
 	for (int i = 0; i < ins.size(); i++){
 		firstspace = ins[i].find_first_of(" \t\f\v\n\r");
 		aux = ins[i].substr(0, firstspace);
-
+		dummy.type_ = -1;
+		dummy.opcode_ = -1;
+		dummy.operando_ = -1;
 		if (aux.c_str() == (string)"LOAD") {
 			dummy.opcode_ = LOAD;
 			coded.push_back(dummy);
