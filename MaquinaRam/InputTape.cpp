@@ -24,6 +24,6 @@ int InputTape::read()
 
 	tape_.push_back(x);
 	pos_++;
-
+	
 	return x;
 }

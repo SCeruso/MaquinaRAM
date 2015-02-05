@@ -29,3 +29,10 @@ instruction Program::run() {
 	pc_++;
 	return program_[pc_]; 
 }
+
+string Program::get_tagName(int line){
+	for (int i = 0; i < tags_.size(); i++) {
+		if (tags_[i].get_line() == line)
+			return tags_[i].get_tag();
+	}
+}

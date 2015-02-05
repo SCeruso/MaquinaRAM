@@ -10,6 +10,7 @@
 #include <algorithm>
 #define ACCUM 0
 
+using namespace std;
 class RamMachine
 {
 private:
@@ -35,6 +36,6 @@ public:
 	void jgtz(int);
 	void jzero(int);
 	void run();
-	void imprimir();
+	void imprimir(instruction ins);
 };
 

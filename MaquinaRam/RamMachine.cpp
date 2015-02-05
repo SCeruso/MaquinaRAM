@@ -7,6 +7,7 @@
 
 RamMachine::RamMachine()
 {
+	registers_.resize(1);
 }
 
 
@@ -243,9 +244,19 @@ void  RamMachine::load(int type, int operando) {
 void RamMachine::store(int type, int operando) {
 	try {
 		if (type == DIRECT) {
+			if (operando >= registers_.size()) {
+				registers_.resize(operando + 1, -65555);
+			}
 			registers_[operando] = registers_[ACCUM];
 		}
 		else if (type == POINTER) {
+			if (operando >= registers_.size()) {
+				cerr << "Intento de acceso a registros no inicializados." << endl;
+				throw 0;
+			}
+			if (registers_[operando] >= registers_.size()) {
+				registers_.resize(operando + 1);
+			}
 			registers_[registers_[operando]] = registers_[ACCUM];
 		}
 	}
@@ -328,12 +339,33 @@ void RamMachine::div(int type, int operando) {
 
 
 void RamMachine::read(int type, int operando) {
-	registers_[ACCUM] = input_.read();
+
+		if (type == DIRECT) {
+			registers_[operando] = input_.read();
+		}
+		else if (type == POINTER) {
+			registers_[registers_[operando]] = input_.read();
+		}
 }
 
 
 void RamMachine::write(int type, int operando) {
 	output.write(registers_[ACCUM]);
+
+	try {
+		if (type == IMMEDIATE) {
+			output.write(operando);
+		}
+		else if (type == DIRECT) {
+			output.write(registers_[operando]);
+		}
+		else if (type == POINTER) {
+			output.write(registers_[registers_[operando]]);
+		}
+	}
+	catch (...) {
+		throw;
+	}
 }
 
 
@@ -353,31 +385,72 @@ void RamMachine::run() {
 	instruction ins;
 
 	ins.opcode_ = -1;
-	imprimir();
+	
 	while (ins.opcode_ != HALT) {
 		
 		ins = program_.run();
 		
-		switch (ins.opcode_) {
-		case LOAD: load(ins.type_, ins.operando_); break;
-		case STORE: store(ins.type_, ins.operando_); break;
-		case ADD:  add(ins.type_, ins.operando_); break;
-		case SUB: sub(ins.type_, ins.operando_); break;
-		case MULT: mult(ins.type_, ins.operando_); break;
-		case DIV: div(ins.type_, ins.operando_); break;
-		case READ: read(ins.type_, ins.operando_); break;
-		case WRITE: write(ins.type_, ins.operando_); break;
-		case JUMP: program_.set_pc((ins.operando_ - 1)); break;
-		case JGTZ: jgtz(ins.operando_); break;
-		case JZERO: jzero(ins.operando_); break;
-		case HALT: break;
-		default:
+		try {
+			switch (ins.opcode_) {
+			case LOAD: load(ins.type_, ins.operando_); break;
+			case STORE: store(ins.type_, ins.operando_); break;
+			case ADD:  add(ins.type_, ins.operando_); break;
+			case SUB: sub(ins.type_, ins.operando_); break;
+			case MULT: mult(ins.type_, ins.operando_); break;
+			case DIV: div(ins.type_, ins.operando_); break;
+			case READ: read(ins.type_, ins.operando_); break;
+			case WRITE: write(ins.type_, ins.operando_); break;
+			case JUMP: program_.set_pc((ins.operando_ - 1)); break;
+			case JGTZ: jgtz(ins.operando_); break;
+			case JZERO: jzero(ins.operando_); break;
+			case HALT: break;
+			default:
+				break;
+			}
+		}
+		catch (...) {
+			cerr << "Se ha producido un error durante la ejecución" << endl;
 			break;
 		}
 
-
-		imprimir();
-		getchar();
+		imprimir(ins);
+		//getchar();
 	}
 
+	cout <<"Se escribio: " << output.toString() << endl;
+}
+
+void RamMachine::imprimir(instruction ins) {
+	system("CLEAR");
+
+	cout << "Instruccion: ";
+	switch (ins.opcode_) {
+	case LOAD: cout << "LOAD "; break;
+	case STORE: cout << "STORE "; break;
+	case ADD: cout << "ADD "; break;
+	case SUB: cout << "SUB "; break;
+	case MULT: cout << "MULT "; break;
+	case DIV: cout << "DIV "; break;
+	case READ: cout << "READ "; break;
+	case WRITE: cout << "WRITE "; break;
+	case JUMP: cout << "JUMP "; break;
+	case JGTZ: cout << "JGTZ "; break;
+	case JZERO: cout << "JZERO "; break;
+	case HALT: cout << "HALT "; break;
+	}
+
+	if (ins.type_ == IMMEDIATE) 
+		cout << "=" << ins.operando_ << endl;
+	else if (ins.type_== DIRECT)
+		cout << ins.operando_ << endl;
+	else if (ins.type_ == POINTER)
+		cout << "*" << ins.operando_ << endl;
+	else if (ins.type_ == TAGJUMP) {
+		cout << program_.get_tagName(ins.operando_) << endl;
+	}
+	cout << "Registros: " << endl;
+
+	for (int i = 0; i < registers_.size(); i++) {
+		cout << "R[" << i << "]: " << registers_[i] << endl;
+	}
 }
