@@ -350,7 +350,6 @@ void RamMachine::read(int type, int operando) {
 
 
 void RamMachine::write(int type, int operando) {
-	output.write(registers_[ACCUM]);
 
 	try {
 		if (type == IMMEDIATE) {
@@ -436,7 +435,7 @@ void RamMachine::imprimir(instruction ins) {
 	case JUMP: cout << "JUMP "; break;
 	case JGTZ: cout << "JGTZ "; break;
 	case JZERO: cout << "JZERO "; break;
-	case HALT: cout << "HALT "; break;
+	case HALT: cout << "HALT " << endl; break;
 	}
 
 	if (ins.type_ == IMMEDIATE) 

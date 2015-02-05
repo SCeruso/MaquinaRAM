@@ -18,13 +18,12 @@ private:
 	OutputTape output;
 	vector<int> registers_;
 	Program program_;
-public:
-	RamMachine();
-	~RamMachine();
-	void read_code(string);
+
+private:
 	bool add_tag(Tag, vector<Tag>&);
 	bool exist_tag(Tag, vector<Tag>&);
-	int get_tagLine(Tag, vector<Tag>&);
+	int get_tagLine(Tag, vector<Tag>&); 
+
 	void load(int, int);
 	void store(int, int);
 	void add(int, int);
@@ -35,6 +34,11 @@ public:
 	void write(int, int);
 	void jgtz(int);
 	void jzero(int);
+public:
+	RamMachine();
+	~RamMachine();
+
+	void read_code(string);
 	void run();
 	void imprimir(instruction ins);
 };
