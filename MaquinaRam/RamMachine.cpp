@@ -34,12 +34,15 @@ bool RamMachine::exist_tag(Tag t, vector<Tag>& tags) {
 	return false;
 }
 
+
 int RamMachine::get_tagLine(Tag t, vector<Tag>& tags) {
 	for (int i = 0; i < tags.size(); i++){
 		if (tags[i] == t)
 			return tags[i].get_line();
 	}
 }
+
+
 void RamMachine::read_code(string filename){
 	
 	vector<string> ins;
@@ -216,4 +219,149 @@ void RamMachine::read_code(string filename){
 	}
 
 	program_.set_program(coded, tags);
+}
+
+
+void  RamMachine::load(int type, int operando) {
+	try {
+		if (type == IMMEDIATE) {
+			registers_[ACCUM] = operando;
+		}
+		else if (type == DIRECT) {
+			registers_[ACCUM] = registers_[operando];
+		}
+		else if (type == POINTER) {
+			registers_[ACCUM] = registers_[registers_[operando]];
+		}
+	}
+	catch (...) {
+		throw;
+	}
+}
+
+
+void RamMachine::store(int type, int operando) {
+	try {
+		if (type == DIRECT) {
+			registers_[operando] = registers_[ACCUM];
+		}
+		else if (type == POINTER) {
+			registers_[registers_[operando]] = registers_[ACCUM];
+		}
+	}
+	catch (...) {
+		throw;
+	}
+}
+
+
+void RamMachine::add(int type, int operando) {
+	try {
+		if (type == IMMEDIATE) {
+			registers_[ACCUM] += operando;
+		}
+		else if (type == DIRECT) {
+			registers_[ACCUM] += registers_[operando];
+		}
+		else if (type == POINTER) {
+			registers_[ACCUM] += registers_[registers_[operando]];
+		}
+	}
+	catch (...) {
+		throw;
+	}
+}
+
+
+void RamMachine::sub(int type, int operando) {
+	try {
+		if (type == IMMEDIATE) {
+			registers_[ACCUM] -= operando;
+		}
+		else if (type == DIRECT) {
+			registers_[ACCUM] -= registers_[operando];
+		}
+		else if (type == POINTER) {
+			registers_[ACCUM] -= registers_[registers_[operando]];
+		}
+	}
+	catch (...) {
+		throw;
+	}
+}
+
+
+void RamMachine::mult(int type, int operando) {
+	try {
+		if (type == IMMEDIATE) {
+			registers_[ACCUM] *= operando;
+		}
+		else if (type == DIRECT) {
+			registers_[ACCUM] *= registers_[operando];
+		}
+		else if (type == POINTER) {
+			registers_[ACCUM] *= registers_[registers_[operando]];
+		}
+	}
+	catch (...) {
+		throw;
+	}
+}
+
+
+void RamMachine::div(int type, int operando) {
+	try {
+		if (type == IMMEDIATE) {
+			registers_[ACCUM] /= operando;
+		}
+		else if (type == DIRECT) {
+			registers_[ACCUM] /= registers_[operando];
+		}
+		else if (type == POINTER) {
+			registers_[ACCUM] /= registers_[registers_[operando]];
+		}
+	}
+	catch (...) {
+		throw;
+	}
+}
+
+
+void RamMachine::read(int type, int operando) {
+	registers_[ACCUM] = input_.read();
+}
+
+
+void RamMachine::write(int type, int operando) {
+	output.write(registers_[ACCUM]);
+}
+
+void RamMachine::run() {
+	instruction ins;
+
+	ins.opcode_ = -1;
+	imprimir();
+	while (ins.opcode_ != HALT) {
+		
+		ins = program_.run();
+		
+		switch (ins.opcode_) {
+		case LOAD: load(ins.type_, ins.operando_); break;
+		case STORE: store(ins.type_, ins.operando_); break;
+		case ADD:  add(ins.type_, ins.operando_); break;
+		case SUB: sub(ins.type_, ins.operando_); break;
+		case MULT: mult(ins.type_, ins.operando_); break;
+		case DIV: div(ins.type_, ins.operando_); break;
+		case READ: read(ins.type_, ins.operando_); break;
+		case WRITE: write(ins.type_, ins.operando_); break;
+		case HALT: break;
+		default:
+			break;
+		}
+
+
+		imprimir();
+		getchar();
+	}
+
 }
