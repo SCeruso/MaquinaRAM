@@ -15,7 +15,7 @@ RamMachine::~RamMachine()
 {
 }
 
-//Cuidado aca
+
 bool RamMachine::add_tag(Tag t, vector<Tag>& tags) {
 	for (int i = 0; i < tags.size(); i++) {
 		if (tags[i] == t)
@@ -255,7 +255,7 @@ void RamMachine::store(int type, int operando) {
 				throw 0;
 			}
 			if (registers_[operando] >= registers_.size()) {
-				registers_.resize(operando + 1);
+				registers_.resize(registers_[operando] + 1);
 			}
 			registers_[registers_[operando]] = registers_[ACCUM];
 		}
@@ -341,9 +341,19 @@ void RamMachine::div(int type, int operando) {
 void RamMachine::read(int type, int operando) {
 
 		if (type == DIRECT) {
+			if (operando >= registers_.size()) {
+				registers_.resize(operando + 1, -65555);
+			}
 			registers_[operando] = input_.read();
 		}
 		else if (type == POINTER) {
+			if (operando >= registers_.size()) {
+				cerr << "Intento de acceso a registros no inicializados." << endl;
+				throw 0;
+			}
+			if (registers_[operando] >= registers_.size()) {
+				registers_.resize(registers_[operando] + 1);
+			}
 			registers_[registers_[operando]] = input_.read();
 		}
 }
@@ -418,6 +428,7 @@ void RamMachine::run() {
 
 	cout <<"Se escribio: " << output.toString() << endl;
 }
+
 
 void RamMachine::imprimir(instruction ins) {
 	system("CLEAR");
