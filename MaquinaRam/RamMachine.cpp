@@ -74,7 +74,7 @@ void RamMachine::read_code(string filename){
 				ins.push_back(aux);
 				if ((tagsymbol = ins.back().find(":")) != string::npos) { //Mejorar para que no ponga dos ':'
 					aux = ins.back().substr(0, tagsymbol);
-					aux.erase(remove_if(aux.begin(), aux.end(), isspace), aux.end());
+					aux.erase(remove_if(aux.begin(), aux.end(), ::isspace), aux.end());
 					tag = new Tag(aux, (ins.size() - 1));
 					if (!add_tag(*tag, tags)){
 						cerr << "La etiqueta: " << tag->get_tag() << " esta repetida." << endl;
@@ -91,8 +91,10 @@ void RamMachine::read_code(string filename){
 			}
 		}
 	}
-	else
+	else {
+		cerr << "Error en el fichero" << endl;
 		throw 1;
+	}
 	file.close();
 
 	for (int i = 0; i < ins.size(); i++){
@@ -153,12 +155,11 @@ void RamMachine::read_code(string filename){
 			coded.push_back(dummy);
 		}
 		else {
-			cerr << "No se reconoce la instruccion: " << aux << endl;
+			cerr << "No se reconoce la instruccion: " << ins[i] << "numero "<< i <<endl;
 			error = true;
 			break;
 		}
-		//Estudiar el halt y jump
-
+                //cout << "La instruccion numero " << i <<" es: "<< ins[i] << endl;//***
 		if (coded[i].opcode_ == HALT) {
 			if (ins[i] != "HALT") {
 				error = true;
@@ -418,7 +419,7 @@ void RamMachine::run() {
 			}
 		}
 		catch (...) {
-			cerr << "Se ha producido un error durante la ejecución" << endl;
+			cerr << "Se ha producido un error durante la ejecucion" << endl;
 			break;
 		}
 
@@ -431,7 +432,7 @@ void RamMachine::run() {
 
 
 void RamMachine::imprimir(instruction ins) {
-	system("CLEAR");
+	system("clear");
 
 	cout << "Instruccion: ";
 	switch (ins.opcode_) {
