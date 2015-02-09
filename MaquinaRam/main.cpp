@@ -1,10 +1,11 @@
 #include "RamMachine.h"
 
-int main(void) {
+int main(int argc, char* argv[]) {
 	RamMachine maquinona;
 
-	maquinona.read_code("test3.txt");
+	maquinona.read_code(argv[1]);
 	maquinona.run();
-	system("PAUSE");
+
+//	system("PAUSE");
 	return 0;
 }
