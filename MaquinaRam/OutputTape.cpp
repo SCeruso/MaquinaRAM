@@ -17,3 +17,9 @@ void OutputTape::write(int n) {
 	tape_.push_back(n);
 	pos_++;
 }
+
+
+void OutputTape::reset() { 
+	pos_ = 0; 
+	tape_.clear();
+}

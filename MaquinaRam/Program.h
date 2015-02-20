@@ -30,5 +30,6 @@ public:
 	instruction run();
 	void set_pc(int);
 	string get_tagName(int);
+	vector<instruction> get_program();
 };
 

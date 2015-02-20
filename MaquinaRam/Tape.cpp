@@ -24,4 +24,8 @@ string Tape::toString(){
 	return aux.str();
 }
 
-int Tape::get_pos() {return pos_;}
+
+void Tape::setFile(string filename) { filename_ = filename; }
+
+
+int Tape::get_pos() { return pos_; }

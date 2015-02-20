@@ -15,7 +15,7 @@ class RamMachine
 {
 private:
 	InputTape input_;
-	OutputTape output;
+	OutputTape output_;
 	vector<int> registers_;
 	Program program_;
 
@@ -34,12 +34,18 @@ private:
 	void write(int, int);
 	void jgtz(int);
 	void jzero(int);
+	void halt();
+	void reset();
 public:
 	RamMachine();
 	~RamMachine();
 
 	void read_code(string);
-	void run();
-	void imprimir(instruction ins);
+	void run(bool);
+	void imprimirInstruccion(instruction ins);
+	void imprimirRegistros();
+	void imprimirPrograma();
+	void imprimirInput();
+	void imprimirOutput();
 };
 

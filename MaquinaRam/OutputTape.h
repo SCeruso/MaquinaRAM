@@ -12,6 +12,8 @@ class OutputTape :
 public:
 	OutputTape();
 	~OutputTape();
+
 	void write(int);
+	void reset();
 };
 

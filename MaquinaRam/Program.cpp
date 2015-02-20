@@ -21,13 +21,16 @@ void Program::set_program(vector<instruction> instrucciones, vector<Tag> etiquet
 }
 
 
+vector<instruction> Program::get_program() {
+	return program_;
+}
 void Program::set_pc(int p) { pc_ = p; }
 
 
 instruction Program::run() {
 
 	pc_++;
-	return program_[pc_]; 
+	return program_[pc_]; //Probar con program_[pc_++];
 }
 
 string Program::get_tagName(int line){
@@ -35,4 +38,5 @@ string Program::get_tagName(int line){
 		if (tags_[i].get_line() == line)
 			return tags_[i].get_tag();
 	}
+	throw 4;
 }

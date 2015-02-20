@@ -221,6 +221,23 @@ void RamMachine::read_code(string filename){
 	}
 
 	program_.set_program(coded, tags);
+	//input.setFile(inputFileName);
+	//input.readFile();
+	//output.setFile(output.Filename);
+}
+
+
+void RamMachine::halt() {
+	output_.writeFile();
+	//reset();
+}
+
+void RamMachine::reset() {
+	input_.reset();
+	output_.reset(); 
+	program_.set_pc(0); //***********************cuidado con pc == 0??
+	registers_.clear();
+	registers_.push_back(0);
 }
 
 
@@ -364,13 +381,13 @@ void RamMachine::write(int type, int operando) {
 
 	try {
 		if (type == IMMEDIATE) {
-			output.write(operando);
+			output_.write(operando);
 		}
 		else if (type == DIRECT) {
-			output.write(registers_[operando]);
+			output_.write(registers_[operando]);
 		}
 		else if (type == POINTER) {
-			output.write(registers_[registers_[operando]]);
+			output_.write(registers_[registers_[operando]]);
 		}
 	}
 	catch (...) {
@@ -391,11 +408,11 @@ void RamMachine::jzero(int operando) {
 }
 
 
-void RamMachine::run() {
+void RamMachine::run(bool traza) {
 	instruction ins;
 
 	ins.opcode_ = -1;
-	
+	reset();
 	while (ins.opcode_ != HALT) {
 		
 		ins = program_.run();
@@ -413,7 +430,7 @@ void RamMachine::run() {
 			case JUMP: program_.set_pc((ins.operando_ - 1)); break;
 			case JGTZ: jgtz(ins.operando_); break;
 			case JZERO: jzero(ins.operando_); break;
-			case HALT: break;
+			case HALT: /*halt() {output_.writeFile();}*/break;
 			default:
 				break;
 			}
@@ -423,15 +440,18 @@ void RamMachine::run() {
 			break;
 		}
 
-		imprimir(ins);
-		//getchar();
+		imprimirInstruccion(ins);
+		if (traza) {
+			imprimirRegistros();
+			getchar();
+		}
 	}
 
-	cout <<"Se escribio: " << output.toString() << endl;
+	cout <<"Se escribio: " << output_.toString() << endl;
 }
 
 
-void RamMachine::imprimir(instruction ins) {
+void RamMachine::imprimirInstruccion(instruction ins) {
 	system("clear");
 
 	cout << "Instruccion: ";
@@ -459,9 +479,25 @@ void RamMachine::imprimir(instruction ins) {
 	else if (ins.type_ == TAGJUMP) {
 		cout << program_.get_tagName(ins.operando_) << endl;
 	}
+}
+
+
+void RamMachine::imprimirRegistros() {
 	cout << "Registros: " << endl;
 
 	for (int i = 0; i < registers_.size(); i++) {
 		cout << "R[" << i << "]: " << registers_[i] << endl;
 	}
 }
+
+
+void RamMachine::imprimirPrograma() {
+	for (int i = 0; i < program_.get_program().size(); i++)
+		imprimirInstruccion(program_.get_program()[i]);
+}
+
+
+void RamMachine::imprimirInput() { cout << input_.toString() << endl; }
+
+
+void RamMachine::imprimirOutput() { cout << output_.toString() << endl; }

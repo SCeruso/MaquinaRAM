@@ -14,5 +14,6 @@ public:
 	InputTape();
 	~InputTape();
 	int read();
+	void reset();
 };
 
