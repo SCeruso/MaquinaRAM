@@ -18,8 +18,10 @@ Tape::~Tape()
 string Tape::toString(){
 	stringstream aux;
 	
-	for (int i = 0; i < tape_.size(); i++)
+	for (int i = 0; i < tape_.size(); i++) {
 		aux << tape_[i];
+		aux << " ";
+	}
 
 	return aux.str();
 }

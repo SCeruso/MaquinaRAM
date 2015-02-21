@@ -5,7 +5,7 @@
 #include "Program.h"
 
 
-Program::Program() : pc_(-1)
+Program::Program() : pc_(0)
 {
 }
 
@@ -29,8 +29,9 @@ void Program::set_pc(int p) { pc_ = p; }
 
 instruction Program::run() {
 
-	pc_++;
-	return program_[pc_]; //Probar con program_[pc_++];
+	/*pc_++;
+	return program_[pc_]; */
+	return program_[pc_++];
 }
 
 string Program::get_tagName(int line){

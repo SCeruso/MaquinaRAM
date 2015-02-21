@@ -13,7 +13,9 @@ class InputTape :
 public:
 	InputTape();
 	~InputTape();
+
 	int read();
 	void reset();
+	void readFile();
 };
 

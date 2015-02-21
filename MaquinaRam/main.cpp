@@ -14,15 +14,20 @@ void help() {
 int main(void) {
 	RamMachine maquinona;
 	char op = '0';
-	maquinona.read_code("test3.txt");
-	maquinona.run();
 
-
+	try {
+		maquinona.read_code("test3.txt", "input.txt", "output.txt");
+	}
+	catch (...) {
+		cerr << "Error, no es posible inicializar la maquina RAM" << endl;
+		return 1;
+	}
 
 
 	while (op != 'x') {
 		system("clear");
 		cout << ">";
+		cin >> op;
 		switch (op)
 		{
 		case 'r': maquinona.imprimirRegistros(); break;

@@ -44,7 +44,7 @@ int RamMachine::get_tagLine(Tag t, vector<Tag>& tags) {
 }
 
 
-void RamMachine::read_code(string filename){
+void RamMachine::read_code(string filename, string inputFilename, string outputFilename){
 	
 	vector<string> ins;
 	ifstream file;
@@ -221,21 +221,26 @@ void RamMachine::read_code(string filename){
 	}
 
 	program_.set_program(coded, tags);
-	//input.setFile(inputFileName);
-	//input.readFile();
-	//output.setFile(output.Filename);
+	input_.setFile(inputFilename);
+	try {
+		input_.readFile();
+	}
+	catch (int) {
+		throw;
+	}
+	output_.setFile(outputFilename);
 }
 
 
 void RamMachine::halt() {
 	output_.writeFile();
-	//reset();
+	
 }
 
 void RamMachine::reset() {
 	input_.reset();
 	output_.reset(); 
-	program_.set_pc(0); //***********************cuidado con pc == 0??
+	program_.set_pc(0);
 	registers_.clear();
 	registers_.push_back(0);
 }
@@ -254,6 +259,7 @@ void  RamMachine::load(int type, int operando) {
 		}
 	}
 	catch (...) {
+		cerr << "Se esta intentando cargar un registro no inicializado" << endl;
 		throw;
 	}
 }
@@ -297,6 +303,7 @@ void RamMachine::add(int type, int operando) {
 		}
 	}
 	catch (...) {
+		cerr << "Se esta intentando operar con un registro no inicializado" << endl;
 		throw;
 	}
 }
@@ -315,6 +322,7 @@ void RamMachine::sub(int type, int operando) {
 		}
 	}
 	catch (...) {
+		cerr << "Se esta intentando operar con un registro no inicializado" << endl;
 		throw;
 	}
 }
@@ -333,24 +341,37 @@ void RamMachine::mult(int type, int operando) {
 		}
 	}
 	catch (...) {
+		cerr << "Se esta intentando operar con un registro no inicializado" << endl;
 		throw;
 	}
 }
 
 
 void RamMachine::div(int type, int operando) {
+	
 	try {
 		if (type == IMMEDIATE) {
+			if (operando == 0)
+				throw 7;
 			registers_[ACCUM] /= operando;
 		}
 		else if (type == DIRECT) {
+			if (registers_[operando] == 0)
+				throw 7;
 			registers_[ACCUM] /= registers_[operando];
 		}
 		else if (type == POINTER) {
+			if (registers_[registers_[operando]] == 0)
+				throw 7;
 			registers_[ACCUM] /= registers_[registers_[operando]];
 		}
 	}
+	catch (int) {
+		cerr << "Se esta intentando dividir por 0" << endl;
+		throw;
+	}
 	catch (...) {
+		cerr << "Se esta intentando operar con un registro no inicializado" << endl;
 		throw;
 	}
 }
@@ -391,6 +412,7 @@ void RamMachine::write(int type, int operando) {
 		}
 	}
 	catch (...) {
+		cerr << "Se esta intentando operar con un registro no inicializado" << endl;
 		throw;
 	}
 }
@@ -398,13 +420,13 @@ void RamMachine::write(int type, int operando) {
 
 void RamMachine::jgtz(int operando) {
 	if (registers_[ACCUM] > 0)
-		program_.set_pc((operando - 1));
+		program_.set_pc((operando));
 }
 
 
 void RamMachine::jzero(int operando) {
 	if (registers_[ACCUM] == 0)
-		program_.set_pc((operando - 1));
+		program_.set_pc((operando));
 }
 
 
@@ -427,10 +449,10 @@ void RamMachine::run(bool traza) {
 			case DIV: div(ins.type_, ins.operando_); break;
 			case READ: read(ins.type_, ins.operando_); break;
 			case WRITE: write(ins.type_, ins.operando_); break;
-			case JUMP: program_.set_pc((ins.operando_ - 1)); break;
+			case JUMP: program_.set_pc((ins.operando_)); break;
 			case JGTZ: jgtz(ins.operando_); break;
 			case JZERO: jzero(ins.operando_); break;
-			case HALT: /*halt() {output_.writeFile();}*/break;
+			case HALT: halt(); break;
 			default:
 				break;
 			}
@@ -441,6 +463,7 @@ void RamMachine::run(bool traza) {
 		}
 
 		imprimirInstruccion(ins);
+		cout << endl;
 		if (traza) {
 			imprimirRegistros();
 			getchar();
@@ -452,9 +475,9 @@ void RamMachine::run(bool traza) {
 
 
 void RamMachine::imprimirInstruccion(instruction ins) {
-	system("clear");
+	//system("clear");
 
-	cout << "Instruccion: ";
+	//cout << "Instruccion: ";
 	switch (ins.opcode_) {
 	case LOAD: cout << "LOAD "; break;
 	case STORE: cout << "STORE "; break;
@@ -467,17 +490,17 @@ void RamMachine::imprimirInstruccion(instruction ins) {
 	case JUMP: cout << "JUMP "; break;
 	case JGTZ: cout << "JGTZ "; break;
 	case JZERO: cout << "JZERO "; break;
-	case HALT: cout << "HALT " << endl; break;
+	case HALT: cout << "HALT "; break;
 	}
 
 	if (ins.type_ == IMMEDIATE) 
-		cout << "=" << ins.operando_ << endl;
+		cout << "=" << ins.operando_;
 	else if (ins.type_== DIRECT)
-		cout << ins.operando_ << endl;
+		cout << ins.operando_;
 	else if (ins.type_ == POINTER)
-		cout << "*" << ins.operando_ << endl;
+		cout << "*" << ins.operando_;
 	else if (ins.type_ == TAGJUMP) {
-		cout << program_.get_tagName(ins.operando_) << endl;
+		cout << program_.get_tagName(ins.operando_);
 	}
 }
 
@@ -492,8 +515,24 @@ void RamMachine::imprimirRegistros() {
 
 
 void RamMachine::imprimirPrograma() {
-	for (int i = 0; i < program_.get_program().size(); i++)
+	string tag;
+	
+	for (int i = 0; i < program_.get_program().size(); i++) {
+		cout << i << ":\t";
 		imprimirInstruccion(program_.get_program()[i]);
+		cout << endl;
+	}
+
+	cout << "Tags: " << endl;
+	for (int i = 0; i < program_.get_program().size(); i++) {
+		try {
+			tag = program_.get_tagName(i);
+			cout << tag << "-> line " << i << endl;
+		}
+		catch (int) {
+			continue;
+		}
+	}
 }
 
 

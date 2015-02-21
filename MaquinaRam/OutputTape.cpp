@@ -19,6 +19,22 @@ void OutputTape::write(int n) {
 }
 
 
+
+void OutputTape::writeFile() {
+	ofstream file;
+
+	file.open(filename_.c_str());
+
+	if (file.good()) {
+		for (int i = 0; i < tape_.size(); i++) 
+			file << tape_[i];		
+		file.close();
+	}
+	else {
+		cerr << "Error en el fichero de escritura de cinta de salida" << endl;
+		throw 10;
+	}
+}
 void OutputTape::reset() { 
 	pos_ = 0; 
 	tape_.clear();

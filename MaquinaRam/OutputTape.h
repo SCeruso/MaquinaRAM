@@ -14,6 +14,7 @@ public:
 	~OutputTape();
 
 	void write(int);
+	void writeFile();
 	void reset();
 };
 

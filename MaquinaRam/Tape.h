@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include<fstream>
+#include<iostream>
 using namespace std;
 
 class Tape
@@ -23,6 +24,6 @@ public:
 	string toString();
 	int get_pos();
 	void setFile(string);
-	virtual void reset();
+	virtual void reset() = 0;
 };
 

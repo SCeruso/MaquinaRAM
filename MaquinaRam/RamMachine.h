@@ -40,9 +40,9 @@ public:
 	RamMachine();
 	~RamMachine();
 
-	void read_code(string);
+	void read_code(string, string, string);
 	void run(bool);
-	void imprimirInstruccion(instruction ins);
+	void imprimirInstruccion(instruction);
 	void imprimirRegistros();
 	void imprimirPrograma();
 	void imprimirInput();
