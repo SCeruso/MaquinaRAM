@@ -2,7 +2,7 @@ Random access machine
 =====================
 Simulation of a random access machine.
 ##Usage
-Load your code with method RamMachine.read_code("filename"), run with RamMachine.run() and watch execution.
+Compile with make and run wih ./a.out "filename"
 Supported instruction set:
 * LOAD
 * STORE
