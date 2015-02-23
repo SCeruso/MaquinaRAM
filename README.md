@@ -2,7 +2,7 @@ Random access machine
 =====================
 Simulation of a random access machine.
 ##Usage
-Compile with make and run wih ./a.out "sourceFilename" "inputTapeFilename" "outputFilename"
+Create your "bin" directory in MaquinaRam/ then compile with make and run wih ./maquinaRAM.out "sourceFilename" "inputTapeFilename" "outputFilename"
 Supported instruction set:
 * LOAD
 * STORE
