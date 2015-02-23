@@ -2,7 +2,7 @@
  *Author: Sabato Ceruso
  *Date: 05/02/2015
 */
-#include "InputTape.h"
+#include "../includes/InputTape.h"
 
 
 InputTape::InputTape()

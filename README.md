@@ -2,7 +2,7 @@ Random access machine
 =====================
 Simulation of a random access machine.
 ##Usage
-Compile with make and run wih ./a.out "filename"
+Compile with make and run wih ./a.out "sourceFilename" "inputTapeFilename" "outputFilename"
 Supported instruction set:
 * LOAD
 * STORE

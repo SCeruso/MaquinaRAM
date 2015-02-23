@@ -1,4 +1,4 @@
-#include "RamMachine.h"
+#include "../includes/RamMachine.h"
 
 void help() {
 	cout << "r: ver los registros" << endl;
