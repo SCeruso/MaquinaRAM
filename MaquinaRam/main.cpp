@@ -11,12 +11,12 @@ void help() {
 	cout << "x : salir" << endl;
 }
 
-int main(void) {
+int main(int argc, char* argv[]) {
 	RamMachine maquinona;
 	char op = '0';
 
 	try {
-		maquinona.read_code("test3.txt", "input.txt", "output.txt");
+		maquinona.read_code(argv[1], argv[2], argv[3]);
 	}
 	catch (...) {
 		cerr << "Error, no es posible inicializar la maquina RAM" << endl;
@@ -25,7 +25,7 @@ int main(void) {
 
 
 	while (op != 'x') {
-		system("clear");
+	
 		cout << ">";
 		cin >> op;
 		switch (op)
