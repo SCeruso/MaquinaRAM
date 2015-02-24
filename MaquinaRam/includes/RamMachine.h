@@ -9,6 +9,8 @@
 #include <fstream>
 #include <algorithm>
 #define ACCUM 0
+#define MAX 1000
+#define MIN -1000
 
 using namespace std;
 class RamMachine

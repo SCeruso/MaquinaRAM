@@ -282,7 +282,7 @@ void RamMachine::store(int type, int operando) {
 				registers_.resize(registers_[operando] + 1);
 			}
 			registers_[registers_[operando]] = registers_[ACCUM];
-		}
+			}
 	}
 	catch (...) {
 		throw;
@@ -294,12 +294,26 @@ void RamMachine::add(int type, int operando) {
 	try {
 		if (type == IMMEDIATE) {
 			registers_[ACCUM] += operando;
+			  if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
+
 		}
 		else if (type == DIRECT) {
 			registers_[ACCUM] += registers_[operando];
+			  if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
+
 		}
 		else if (type == POINTER) {
 			registers_[ACCUM] += registers_[registers_[operando]];
+			  if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
 		}
 	}
 	catch (...) {
@@ -313,12 +327,27 @@ void RamMachine::sub(int type, int operando) {
 	try {
 		if (type == IMMEDIATE) {
 			registers_[ACCUM] -= operando;
+			  if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
+
 		}
 		else if (type == DIRECT) {
 			registers_[ACCUM] -= registers_[operando];
+			  if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
+
 		}
 		else if (type == POINTER) {
 			registers_[ACCUM] -= registers_[registers_[operando]];
+			  if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
+
 		}
 	}
 	catch (...) {
@@ -332,12 +361,27 @@ void RamMachine::mult(int type, int operando) {
 	try {
 		if (type == IMMEDIATE) {
 			registers_[ACCUM] *= operando;
+			if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
+
 		}
 		else if (type == DIRECT) {
 			registers_[ACCUM] *= registers_[operando];
+			if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+				cerr << "Desbordamiento" << endl;
+				throw 10;
+			}
+				
 		}
 		else if (type == POINTER) {
 			registers_[ACCUM] *= registers_[registers_[operando]];
+			  if (registers_[ACCUM] >= MAX || registers_[ACCUM] <= MIN) {
+                                cerr << "Desbordamiento" << endl;
+                                throw 10;
+                        }
+
 		}
 	}
 	catch (...) {
